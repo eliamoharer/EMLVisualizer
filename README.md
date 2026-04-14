@@ -8,7 +8,7 @@ Based on [Odrzywołek (2026), "All elementary functions from a single binary ope
 
 ## Quick Start (Windows)
 
-1. Open a terminal in this folder (`L:\AI\EML`).
+1. Open a terminal in your folder.
 2. Install dependencies:
    ```
    npm install
