@@ -15,6 +15,14 @@ body {
   overflow: hidden;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
 /* ── App shell ─────────────────────────────────────────── */
 
 .app-shell {
@@ -26,6 +34,7 @@ body {
 .canvas-viewport {
   position: absolute;
   inset: 0;
+  touch-action: none;
 }
 
 /* ── Panels ────────────────────────────────────────────── */
@@ -44,11 +53,21 @@ body {
 .control-panel {
   right: 18px;
   top: 18px;
+  width: min(320px, calc(100vw - 24px));
+  max-height: min(78vh, 640px);
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .search-panel {
   left: 18px;
   top: 18px;
+  width: min(320px, calc(100vw - 104px));
+}
+
+.control-panel::-webkit-scrollbar {
+  display: none;
 }
 
 .panel h2 {
@@ -63,6 +82,50 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.panel-header h2 {
+  margin: 0;
+}
+
+.panel-close-btn,
+.control-toggle {
+  border: 1px solid rgba(180, 172, 160, 0.35);
+  border-radius: 12px;
+  background: rgba(248, 245, 240, 0.94);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  font-family: inherit;
+  color: #4f4844;
+}
+
+.panel-close-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.control-toggle {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  z-index: 2;
+  min-width: 84px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .depth-value {
@@ -86,7 +149,7 @@ body {
   border: 1px solid rgba(180, 172, 160, 0.45);
   padding: 8px 10px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   background: rgba(255, 255, 255, 0.5);
   color: inherit;
   outline: none;
@@ -223,6 +286,43 @@ body {
   margin: 8px 0 0;
   font-size: 12px;
   color: #8d564f;
+}
+
+@media (max-width: 720px) {
+  .panel {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .search-panel {
+    top: max(12px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
+    width: min(320px, calc(100vw - 112px));
+  }
+
+  .control-toggle,
+  .control-panel {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+
+  .control-panel {
+    width: min(330px, calc(100vw - 24px));
+    max-height: min(74vh, 560px);
+  }
+
+  .search-panel ul {
+    max-height: 34vh;
+  }
+
+  .toggle-line {
+    font-size: 15px;
+  }
+
+  .search-panel button,
+  .create-node-btn {
+    font-size: 14px;
+  }
 }
 
 /* ── Focus overlay ─────────────────────────────────────── */

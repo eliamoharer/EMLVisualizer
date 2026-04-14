@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Family } from '../core/eml/types'
 import { TOGGLEABLE_FAMILIES } from '../core/eml/types'
 import { FAMILY_META } from '../core/eml/families'
@@ -15,8 +16,34 @@ export function ControlPanel({
   familyEnabled,
   onToggleFamily,
 }: ControlPanelProps) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  if (!isOpen) {
+    return (
+      <button
+        type="button"
+        className="control-toggle"
+        onClick={() => setIsOpen(true)}
+        aria-label="Open derivation controls"
+      >
+        Depth {depth}
+      </button>
+    )
+  }
+
   return (
     <aside className="panel control-panel">
+      <div className="panel-header">
+        <h2>Controls</h2>
+        <button
+          type="button"
+          className="panel-close-btn"
+          onClick={() => setIsOpen(false)}
+          aria-label="Close controls"
+        >
+          ×
+        </button>
+      </div>
       <h2>Derivation Depth</h2>
       <label className="depth-label">
         <span className="depth-value">{depth}</span>

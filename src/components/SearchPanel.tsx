@@ -65,12 +65,7 @@ export function SearchPanel({
         </ul>
       ) : query ? (
         <p className="hint">No built-in match yet. You can still create a custom node.</p>
-      ) : (
-        <p className="hint">
-          Typing highlights every matching path immediately. Press Enter for the top
-          result, or create a brand-new function node.
-        </p>
-      )}
+      ) : null}
       {createError ? <p className="error-hint">{createError}</p> : null}
     </aside>
   )
