@@ -42,6 +42,7 @@ body,
 .panel {
   position: absolute;
   width: 300px;
+  z-index: 2;
   border: 1px solid rgba(180, 172, 160, 0.35);
   border-radius: 12px;
   background: rgba(248, 245, 240, 0.88);
@@ -53,6 +54,7 @@ body,
 .control-panel {
   right: 18px;
   top: 18px;
+  z-index: 5;
   width: min(320px, calc(100vw - 24px));
   max-height: min(78vh, 640px);
   overflow: auto;
@@ -63,7 +65,9 @@ body,
 .search-panel {
   left: 18px;
   top: 18px;
+  z-index: 3;
   width: min(320px, calc(100vw - 104px));
+  padding-bottom: 10px;
 }
 
 .control-panel::-webkit-scrollbar {
@@ -120,7 +124,7 @@ body,
   position: absolute;
   right: 18px;
   top: 18px;
-  z-index: 2;
+  z-index: 6;
   min-width: 84px;
   padding: 10px 14px;
   font-size: 14px;
@@ -247,7 +251,7 @@ body,
 .search-actions {
   display: flex;
   justify-content: flex-end;
-  margin: 4px 0 8px;
+  margin: 4px 0 4px;
 }
 
 .create-node-btn {
@@ -298,6 +302,7 @@ body,
     top: max(12px, env(safe-area-inset-top));
     left: max(12px, env(safe-area-inset-left));
     width: min(320px, calc(100vw - 112px));
+    padding-bottom: 8px;
   }
 
   .control-toggle,
