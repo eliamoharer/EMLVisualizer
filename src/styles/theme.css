@@ -1,0 +1,564 @@
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  font-family: "STIX Two Text", "Times New Roman", Georgia, serif;
+  color: #3a3535;
+  background: #f8f5f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+/* ── App shell ─────────────────────────────────────────── */
+
+.app-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.canvas-viewport {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── Panels ────────────────────────────────────────────── */
+
+.panel {
+  position: absolute;
+  width: 300px;
+  border: 1px solid rgba(180, 172, 160, 0.35);
+  border-radius: 12px;
+  background: rgba(248, 245, 240, 0.88);
+  backdrop-filter: blur(10px);
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.control-panel {
+  right: 18px;
+  top: 18px;
+}
+
+.search-panel {
+  left: 18px;
+  top: 18px;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #5a5450;
+}
+
+.depth-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.depth-value {
+  font-size: 22px;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+}
+
+.panel input[type='range'] {
+  flex: 1;
+  accent-color: #b4a890;
+}
+
+.panel input[type='text'],
+.panel input[type='search'],
+.panel input:not([type='checkbox']):not([type='range']) {
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(180, 172, 160, 0.45);
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  color: inherit;
+  outline: none;
+}
+
+.panel input:focus {
+  border-color: rgba(160, 140, 110, 0.6);
+}
+
+.search-input-wrap {
+  position: relative;
+}
+
+.search-input-wrap input {
+  padding-right: 34px;
+}
+
+.search-clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 22px !important;
+  height: 22px;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 999px;
+  padding: 0 !important;
+  background: transparent !important;
+  color: rgba(90, 84, 80, 0.72) !important;
+  font-size: 18px !important;
+  line-height: 1;
+  text-align: center !important;
+  cursor: pointer;
+}
+
+.search-clear-btn:hover {
+  background: rgba(180, 168, 144, 0.18) !important;
+  color: #4a4440 !important;
+}
+
+.family-grid {
+  margin-top: 4px;
+}
+
+.toggle-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.search-panel ul {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.search-panel li {
+  margin: 2px 0;
+}
+
+.search-panel button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.search-panel button:hover {
+  background: rgba(180, 168, 144, 0.18);
+}
+
+.search-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0 8px;
+}
+
+.create-node-btn {
+  display: inline-flex;
+  width: auto;
+  text-align: center;
+  border: 1px solid rgba(160, 146, 126, 0.45);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: rgba(190, 178, 154, 0.18);
+  font-family: inherit;
+  font-size: 13px;
+  color: #4a4440;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.create-node-btn:hover:not(:disabled) {
+  background: rgba(190, 178, 154, 0.3);
+  transform: translateY(-1px);
+}
+
+.create-node-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 13px;
+  color: #8a8480;
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+.error-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #8d564f;
+}
+
+/* ── Focus overlay ─────────────────────────────────────── */
+
+.focus-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 18, 17, 0.46);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  animation: focusFadeIn 0.28s ease;
+}
+
+.focus-overlay-closing {
+  animation: focusFadeOut 0.16s ease forwards;
+}
+
+.focus-close-float {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 251, 246, 0.92);
+  font-size: 40px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.focus-stage {
+  width: min(1080px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 26px 18px 34px;
+  color: #fffaf6;
+  animation: focusRiseIn 0.34s ease;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.focus-stage-closing {
+  animation: focusSinkOut 0.16s ease forwards;
+}
+
+.focus-stage::-webkit-scrollbar {
+  display: none;
+}
+
+.focus-headline {
+  text-align: center;
+}
+
+.focus-function {
+  margin-top: 8px;
+  font-size: clamp(2.2rem, 4vw, 4rem);
+}
+
+.focus-family-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.focus-description {
+  width: min(760px, 90%);
+  margin: 12px auto 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 247, 239, 0.88);
+}
+
+.focus-meta {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: rgba(255, 247, 239, 0.72);
+}
+
+.focus-eml-shell,
+.focus-solution {
+  width: min(980px, 100%);
+  margin: 28px auto 0;
+  min-height: 240px;
+}
+
+.focus-shell-title {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(255, 247, 239, 0.82);
+}
+
+.focus-eml-expression {
+  font-size: clamp(1.15rem, 1.5vw, 1.55rem);
+  line-height: 2.05;
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  padding: 0 8px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(176, 171, 165, 0.82) transparent;
+  -ms-overflow-style: auto;
+}
+
+.focus-eml-expression::-webkit-scrollbar {
+  height: 8px;
+}
+
+.focus-eml-expression::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.focus-eml-expression::-webkit-scrollbar-thumb {
+  background: rgba(176, 171, 165, 0.82);
+  border-radius: 999px;
+}
+
+.focus-deep-calculate {
+  text-align: center;
+}
+
+.deep-calc-btn {
+  border: 1px solid rgba(255, 247, 239, 0.28);
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: rgba(255, 247, 239, 0.1);
+  font-family: inherit;
+  font-size: 15px;
+  color: #fffaf6;
+  cursor: pointer;
+  transition: transform 0.18s, background 0.18s;
+}
+
+.deep-calc-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255, 247, 239, 0.18);
+}
+
+.deep-calc-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.focus-hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: rgba(255, 247, 239, 0.76);
+  font-style: italic;
+}
+
+/* ── Interactive EML expression ────────────────────────── */
+
+.interactive-eml-root {
+  display: inline-flex;
+  min-width: 100%;
+  justify-content: center;
+}
+
+.interactive-eml-node {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  border: none;
+  background: transparent;
+  padding: 0.08em 0.18em;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  border-radius: 0.46em;
+  cursor: pointer;
+  z-index: 0;
+  transition:
+    color 0.22s ease,
+    transform 0.22s ease;
+}
+
+.interactive-eml-node::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1.7em;
+  transform: translateY(-50%);
+  border-radius: 0.46em;
+  background: transparent;
+  box-shadow: none;
+  transition:
+    background-color 0.12s ease,
+    box-shadow 0.12s ease,
+    opacity 0.12s ease;
+  z-index: -1;
+}
+
+.interactive-eml-token {
+  font-weight: 600;
+}
+
+.interactive-eml-punct {
+  opacity: 0.86;
+}
+
+.interactive-eml-highlighted {
+  transform: translateY(-1px);
+}
+
+.interactive-eml-highlighted::before {
+  background: rgba(41, 36, 34, 0.28);
+  box-shadow: 0 0 0 1px rgba(255, 247, 239, 0.06);
+}
+
+.interactive-eml-selected {
+  transform: translateY(-1px);
+}
+
+.interactive-eml-selected::before {
+  background: rgba(27, 23, 22, 0.42);
+  box-shadow:
+    0 0 0 1px rgba(255, 247, 239, 0.16),
+    0 0 22px rgba(0, 0, 0, 0.12);
+}
+
+.interactive-eml-leaf {
+  color: rgba(255, 238, 217, 0.98);
+}
+
+/* ── Solution lines ────────────────────────────────────── */
+
+.focus-solution-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.focus-solution-line {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  color: #fffaf6;
+  animation: solutionLineIn 0.3s ease both;
+}
+
+.focus-equals {
+  width: 24px;
+  text-align: center;
+  opacity: 0.76;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.focus-solution-line .math-text {
+  display: block;
+  min-width: 0;
+}
+
+.focus-solution-line .math-text .katex-display {
+  margin: 0;
+  text-align: left;
+}
+
+.focus-solution-empty {
+  opacity: 0.92;
+}
+
+/* ── Math text ─────────────────────────────────────────── */
+
+.math-text .katex {
+  font-size: 1em;
+}
+
+.math-text-fallback {
+  display: block;
+  color: rgba(255, 247, 239, 0.82);
+  font-style: italic;
+}
+
+@keyframes focusFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes focusFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes focusRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes focusSinkOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+}
+
+@keyframes solutionLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
